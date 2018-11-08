@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Person from "./Person/Person";
-import "./App.css";
+import classes from "./App.module.css"; //in create-react-app 2.0 the css or scss module will extension with .module.css. 
+import ErrorBoundary from "./ErrorBoundary/ErrorBoundary";
 
 class App extends Component {
   state = {
@@ -44,37 +45,34 @@ class App extends Component {
   };
 
   render() {
-    const style = {
-      backgroundColor: "green",
-      color:"white",
-      font: "inherit",
-      border: "1px solid blue",
-      padding: "8px",
-      cursor: "pointer",
-    };
+    let style = ''
     const { persons, showPerson } = this.state;
-    return (
+    let renderPersons = null;
 
-      <div className="App">
+    if (showPerson) {
+      renderPersons = <div>
+      {persons.map((p, index) => (
+        <ErrorBoundary><Person
+          onClick={() => this.deletePersonsHandler(index)}
+          onChange={(e)=>this.changeNameHandler(e,index)}
+          name={p.name}
+          age={p.age}
+          key={index}
+        /></ErrorBoundary>
+      ))}
+    </div>
+    style = classes.Red;
+    }
+
+    return (
+     
+      <div className={classes.App}>
         <h1>Hi, I'm a React App</h1>
-        <button style={style} onClick={this.togglePersonsHandler}>
+        <button className={style} onClick={this.togglePersonsHandler}>
           Switch Name
         </button>
-        {showPerson &&(style.backgroundColor='red')&& (
-          <div>
-            {persons.map((p, index) => (
-              <Person
-                onClick={() => this.deletePersonsHandler(index)}
-                onChange={(e)=>this.changeNameHandler(e,index)}
-                name={p.name}
-                age={p.age}
-                key={index}
-              />
-            ))}
-          </div>
-        )}
+        {renderPersons}
       </div>
-
     );
     // Same as below
     // return React.createElement(

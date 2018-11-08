@@ -5,4 +5,11 @@
   padding: 16px;
   text-align: center;
   margin: 15px auto;
+
+}
+
+@media (min-width: 500px) {
+  .Person {
+    background-color: salmon;
+  }
 }
