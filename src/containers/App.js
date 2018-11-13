@@ -4,6 +4,7 @@ import Persons from "../components/Persons/Persons";
 import Cockpit from "../components/Cockpit/Cockpit";
 import withClass from "../hoc/withClass";
 
+export const LoginContext = React.createContext(false);
 class App extends Component {
   constructor(props) {
     console.log("[App.js] in constructor", props);
@@ -15,7 +16,8 @@ class App extends Component {
         { name: "Tony", age: 28 }
       ],
       showPerson: false,
-      toggleClicked: 0
+      toggleClicked: 0,
+      authorizated: false
     };
   }
   componentWillMount() {
@@ -63,6 +65,10 @@ class App extends Component {
     persons.splice(index, 1);
     this.setState({ persons: persons });
   };
+  loginHandler = () => {
+    const isAuth = this.state.authorizated;
+    this.setState({ authorizated: !isAuth });
+  };
   render() {
     console.log("[App.js] in render");
     const { persons, showPerson } = this.state;
@@ -79,8 +85,14 @@ class App extends Component {
     }
     return (
       <Fragment>
-        <Cockpit showPerson={showPerson} toggle={this.togglePersonsHandler} />
-        {renderPersons}
+        <Cockpit
+          showPerson={showPerson}
+          login={this.loginHandler}
+          toggle={this.togglePersonsHandler}
+        />
+        <LoginContext.Provider value={this.state.authorizated}>
+          {renderPersons}
+        </LoginContext.Provider>
       </Fragment>
     );
     // Same as below
